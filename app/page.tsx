@@ -1,101 +1,164 @@
-import Image from "next/image";
+import AddTaskModel from "@/components/AddTaskModel";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+
+const week = [
+  {
+    day: "M",
+    date: 20,
+    currentDay: false,
+    pastDay: true,
+  },
+  {
+    day: "T",
+    date: 21,
+    currentDay: false,
+    pastDay: true,
+  },
+  {
+    day: "W",
+    date: 22,
+    currentDay: false,
+    pastDay: true,
+  },
+  {
+    day: "T",
+    date: 23,
+    currentDay: false,
+    pastDay: true,
+  },
+  {
+    day: "F",
+    date: 24,
+    currentDay: true,
+    pastDay: false,
+  },
+  {
+    day: "S",
+    date: 25,
+    currentDay: false,
+    pastDay: false,
+  },
+  {
+    day: "S",
+    date: 26,
+    currentDay: false,
+    pastDay: false,
+  },
+];
+
+const todoMap = [
+  {
+    id: 1,
+    status: "DONE",
+    title: "Meet Jack Sparrow",
+    description: "Free him from the prison",
+  },
+  {
+    id: 2,
+    status: "TO_DO",
+    title: "Meet Jack Sparrow",
+    description: "Free him from the prison",
+  },
+  {
+    id: 3,
+    status: "TO_DO",
+    title: "Meet Jack Sparrow",
+    description: "Free him from the prison",
+  },
+  {
+    id: 4,
+    status: "TO_DO",
+    title: "Meet Jack Sparrow",
+    description: "Free him from the prison",
+  },
+  {
+    id: 5,
+    status: "TO_DO",
+    title: "Meet Jack Sparrow",
+    description: "Free him from the prison",
+  },
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  return (
+    <main className="min-h-full min-w-full">
+      <section className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-[3.2rem] w-[25rem] h-[45rem]  border-[0.4rem] border-[#E4E8E9] bg-white">
+        <div className="flex flex-col h-full w-full py-3 items-start justify-between  bg-[#e4e8e9] bg-opacity-30">
+          {/* day selection section */}
+          <header className=" absolute  top-0 left-0  space-y-8 w-full pt-8 pb-6 px-4 rounded-t-[3rem] rounded-b-3xl shadow-xl bg-white">
+            <h1 className="font-bold text-2xl">onday</h1>
+            <nav className=" flex items-center justify-between">
+              {week.map(({ date, day, currentDay, pastDay }) => (
+                <button
+                  key={date}
+                  className={cn(
+                    "px-3 py-[5px] flex flex-col items-center rounded-md hover:bg-black hover:text-white text-gray-400 group transition duration-200 hover:cursor-pointer",
+                    currentDay && "bg-black text-white",
+                    pastDay && "text-black hover:bg-gray-400"
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "text-sm group-hover:text-white hover:text-md ",
+                      pastDay && "text-gray-400"
+                    )}
+                  >
+                    {day}
+                  </span>
+                  <span className="font-semibold">{date}</span>
+                </button>
+              ))}
+            </nav>
+          </header>
+          {/* todo list section */}
+          <section className="mt-[8.8rem] pt-[2.5rem] w-full px-2">
+            <h2 className="font-bold px-2">Today</h2>
+            <ul className="p-1 pt-2  w-full space-y-4  to-white'">
+              {todoMap.map((item) => (
+                <li
+                  key={item.id}
+                  className="flex py-2 rounded-2xl px-2 items-start space-x-3 border-white/2 bg-white shadow-sm "
+                >
+                  <div className="flex py-1">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox border-black border-2 rounded-full h-5 w-5 cursor-pointer text-black  text-"
+                      aria-label={`Mark ${item.title} as complete`}
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="font-serif font-extrabold text-lg">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-gray-800 font-serif">
+                      {item.description}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+          {/* add todo button */}
+          <footer className="flex w-full items-center justify-center h-full mb-2 mt-5">
+            <button
+              className="rounded-full h-10 w-10 bg-white shadow-2xl relative border p-6 cursor-pointer"
+              aria-label="Add new todo"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl shadow-2xl">
+                +
+              </span>
+            </button>
+            <AddTaskModel
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </footer>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+    </main>
   );
 }

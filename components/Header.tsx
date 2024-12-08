@@ -30,7 +30,7 @@ const Header = ({ selectedDate, setSelectedDate, week }: HeaderProps) => {
   };
 
   return (
-    <header className=" absolute  top-0 left-0  space-y-8 w-full pt-8 pb-6 px-3 rounded-t-[3rem] rounded-b-3xl shadow-xl bg-white">
+    <header className=" absolute  top-0 left-0  space-y-8 w-full pt-8 pb-6 px-3 rounded-t-[3rem] rounded-b-3xl shadow-xl bg-white ">
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-2xl">onday</h1>
         <h1 className="font-bold text-xs">{formatDate(selectedDate)}</h1>

@@ -28,7 +28,7 @@ const AddTaskModel = ({ isOpen, onClose, selectedDate }: AddTaskModalProps) => {
   return (
     <div
       className={
-        "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+        "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-[2.7rem]"
       }
     >
       <div

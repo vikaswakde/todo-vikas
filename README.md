@@ -1,37 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Onday - Task Management Application
+
+A modern, minimalist task management application built with Next.js 14, TypeScript, and Tailwind CSS. Features an intuitive weekly calendar interface and smooth task management capabilities.
+
+## Features
+
+- 📅 Dynamic weekly calendar navigation
+- ✅ Task creation, editing, and deletion
+- 📊 Progress tracking for daily tasks
+- 🎯 Task status management (TODO/DONE)
+- 💾 Persistent storage using Zustand
+- 📱 Responsive and modern UI design
+
+## Tech Stack
+
+- **Framework**: Next.js 14
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **State Management**: Zustand
+- **UI Components**: Custom components with Lucide icons
+- **Storage**: Local storage with persistence
 
 ## Getting Started
 
-First, run the development server:
+Clone the repository:
+`git clone https://github.com/vikaswakde/todo-vikas.git`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Key Features Explained
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Calendar Navigation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Weekly view with current day highlight
+- Previous/Next week navigation
+- Quick "Today" button access
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Task Management
 
-## Learn More
+- Create tasks with title and description
+- Edit existing tasks
+- Mark tasks as complete/incomplete
+- Delete tasks
+- Daily task progress tracking
 
-To learn more about Next.js, take a look at the following resources:
+### User Interface
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Clean and minimal design
+- Intuitive task interactions
+- Visual feedback for actions
+- Progress tracking visualization
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# todo-vikas
+This project is licensed under the MIT License - see the LICENSE file for details.

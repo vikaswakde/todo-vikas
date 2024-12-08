@@ -1,8 +1,9 @@
 "use client";
 import AddTaskModel from "@/components/AddTaskModel";
+import EditTaskModel from "@/components/EditTaskModel";
 import { Task, useTaskStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import { Trash2Icon } from "lucide-react";
+import { PencilIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const week = [
@@ -51,10 +52,12 @@ const week = [
 ];
 
 export default function Home() {
+  // Local States
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const tasks = useTaskStore((state) => state.tasks);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   // Global State
+  const tasks = useTaskStore((state) => state.tasks);
   const updateTask = useTaskStore((state) => state.updateTask);
   const deleteTask = useTaskStore((state) => state.removeTask);
 
@@ -100,22 +103,22 @@ export default function Home() {
           {/* todo list section */}
           <section className="mt-[8.8rem] pt-[2.5rem] w-full px-2  min-h-[69%] overflow-scroll scrollbar-hide max-w-[24rem] ">
             <h2 className="font-bold px-2 ">Today</h2>
-            <ul className="p-1 pt-2 flex flex-col  w-full '">
+            <ul className="p-1 pt-2 flex flex-col  w-full">
               {tasks.map((task) => (
                 <li
                   key={task.id}
                   className="flex py-2 rounded-2xl px-2 items-start space-x-3 border-white/2 bg-white shadow-sm group cursor-pointer my-1 "
                 >
-                  <div className="flex py-1">
+                  <div className="flex pt-2 px-1">
                     <input
                       type="checkbox"
                       checked={task.status === "DONE"}
                       onChange={() => handleTaskStatusChange(task)}
-                      className="form-checkbox border-black focus:ring-0  rounded-full h-5 w-5 cursor-pointer text-black  transition duration-200"
+                      className="form-checkbox border-black focus:ring-0  rounded-full h-6 w-6 cursor-pointer text-black  transition duration-200"
                       aria-label={`Mark ${task.title} as complete`}
                     />
                   </div>
-                  <div className="flex flex-col flex-grow overflow-clip">
+                  <div className="flex flex-col flex-grow  overflow-clip">
                     <h3
                       className={cn(
                         "font-serif font-extrabold text-lg",
@@ -138,16 +141,42 @@ export default function Home() {
                       </p>
                     )}
                   </div>
-                  <button
-                    onClick={() => deleteTask(task.id)}
-                    className="opacity-0 group-hover:opacity-50 transition-opacity duration-200 p-2 hover:bg-red-100 hover:rounded-2xl hover:border rounded-full "
-                    aria-label="Delete Task"
-                  >
-                    {" "}
-                    <Trash2Icon />
-                  </button>
+                  <div className="opacity-0 group-hover:opacity-100 flex flex-col space-y-1">
+                    <button
+                      onClick={() => setEditingTask(task)}
+                      className={cn(
+                        "transition-opacity duration-200 p-2 hover:bg-gray-100 rounded-xl",
+                        task.status === "DONE" && "hidden"
+                      )}
+                      aria-label="Edit Task"
+                    >
+                      <PencilIcon className="w-3 h-3" />
+                    </button>
+                    <button
+                      onClick={() => deleteTask(task.id)}
+                      className={
+                        "transition-opacity duration-200 p-2 hover:bg-red-100 hover:rounded-xl"
+                      }
+                      aria-label="Delete Task"
+                    >
+                      {" "}
+                      <Trash2Icon
+                        className={cn(
+                          "w-3 h-3",
+                          task.status === "DONE" && "w-5 h-5"
+                        )}
+                      />
+                    </button>
+                  </div>
                 </li>
               ))}
+              {editingTask && (
+                <EditTaskModel
+                  task={editingTask}
+                  isOpen={!!editingTask}
+                  onClose={() => setEditingTask(null)}
+                />
+              )}
             </ul>
           </section>
           {/* add todo button */}

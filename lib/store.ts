@@ -114,12 +114,12 @@ export const useTaskStore = create<State & Actions>()(
         })),
     }),
     {
-      name: "todo-store",
+      name: "todo-store-vikas",
       skipHydration: true,
       onRehydrateStorage: () => (state) => {
         if (
           typeof window !== "undefined" &&
-          !localStorage.getItem("todo-store")
+          !localStorage.getItem("todo-store-vikas")
         ) {
           if (state && !state.tasks?.length) {
             state.tasks = getDemoTasks();

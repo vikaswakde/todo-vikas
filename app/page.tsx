@@ -1,6 +1,7 @@
 "use client";
 import AddTaskModel from "@/components/AddTaskModel";
 import EditTaskModel from "@/components/EditTaskModel";
+import TaskProgress from "@/components/TaskProgress";
 import { formatDate, getWeekDates } from "@/lib/dateUtils";
 import { Task, useTaskStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -29,10 +30,6 @@ export default function Home() {
     updateTask(task.id, newStatus);
   };
 
-  // const goToToday = () => {
-  //   setSelectedDate(new Date());
-  // };
-
   const goToPreviousWeek = () => {
     const newDate = new Date(selectedDate);
     newDate.setDate(selectedDate.getDate() - 7);
@@ -57,6 +54,19 @@ export default function Home() {
       return taskDate.toDateString() === selectedDate.toDateString();
     });
   };
+
+  // stats function
+  const getTaskStats = () => {
+    const tasksForDay = getTasksForSelectedDate();
+    const totalTasks = tasksForDay.length;
+    const completedTasks = tasksForDay.filter(
+      (task) => task.status === "DONE"
+    ).length;
+
+    return { totalTasks, completedTasks };
+  };
+
+  const { totalTasks, completedTasks } = getTaskStats();
 
   const filteredTasks = getTasksForSelectedDate();
 
@@ -100,8 +110,9 @@ export default function Home() {
                     onClick={() => handleDateSelect(new Date(fullDate))}
                     className={cn(
                       "px-3 py-[5px] flex flex-col items-center rounded-md hover:bg-black hover:text-white text-gray-400 group transition duration-200",
-                      // currentDay && "bg-black text-white",
                       // pastDay && "text-black hover:bg-gray-400",
+                      currentDay &&
+                        "border border-cyan-400 bg-cyan-100 text-cyan-800",
                       selectedDate.toDateString() === fullDate.toDateString() &&
                         "bg-black text-white transition duration-200"
                     )}
@@ -129,18 +140,26 @@ export default function Home() {
           </header>
           {/* todo list section */}
           <section className="mt-[8.8rem] pt-[2.5rem] w-full px-2  min-h-[69%] overflow-scroll scrollbar-hide max-w-[24rem] ">
-            <h2 className="font-bold px-2 flex items-center gap-2">
-              {filteredTasks.length > 0 ? (
-                <>
-                  Tasks
-                  <span className="bg-black text-white text-xs px-1.5 py-[1px] rounded-xl opacity-65">
-                    {filteredTasks.length}
-                  </span>
-                </>
-              ) : (
-                "No tasks for this day"
-              )}
-            </h2>
+            <div className="flex items-start justify-between">
+              <h2 className="font-semibold px-2 flex items-center gap-2">
+                {filteredTasks.length > 0 ? (
+                  <>
+                    Tasks
+                    <span className="bg-black text-white text-xs px-1.5 py-[1px] rounded-xl opacity-65">
+                      {filteredTasks.length}
+                    </span>
+                  </>
+                ) : (
+                  "No tasks for this day"
+                )}
+              </h2>
+              <div>
+                <TaskProgress
+                  totalTasks={totalTasks}
+                  completedTasks={completedTasks}
+                />
+              </div>
+            </div>
             <ul className="p-1 pt-2 flex flex-col  w-full">
               {filteredTasks.map((task) => (
                 <li
@@ -221,7 +240,7 @@ export default function Home() {
           {/* add todo button */}
           <footer className="flex w-full items-center justify-center h-full mb-2 mt-5">
             <button
-              className="rounded-full h-10 w-10 bg-white shadow-2xl relative border p-6 cursor-pointer"
+              className="rounded-full h-10 w-10 bg-white shadow-2xl relative border p-6 cursor-pointer transition-opacity duration-300"
               aria-label="Add new todo"
               onClick={() => setIsModalOpen(true)}
             >

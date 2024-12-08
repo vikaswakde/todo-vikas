@@ -26,8 +26,16 @@ const AddTaskModel = ({ isOpen, onClose, selectedDate }: AddTaskModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl p-6 w-96">
+    <div
+      className={
+        "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      }
+    >
+      <div
+        className={
+          "bg-white rounded-xl p-6 w-80 transition-opacity duration-200"
+        }
+      >
         <h2 className="text-xl font-bold mb-4">Add New Task</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

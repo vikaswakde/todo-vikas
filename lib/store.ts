@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { v4 as uuid } from "uuid";
 
-export type Status = "TODO" | "IN_PROGRESS" | "DONE";
+export type Status = "DONE" | "TODO";
 
 export type Task = {
   id: string;
@@ -20,6 +20,7 @@ export type Actions = {
   addTask: (title: string, description?: string) => void;
   removeTask: (id: string) => void;
   updateTask: (title: string, status: Status) => void;
+  updateTaskContent: (id:string, updates: {title?:string; description?:string}) => void;
 };
 
 export const useTaskStore = create<State & Actions>()(
@@ -42,6 +43,10 @@ export const useTaskStore = create<State & Actions>()(
           tasks: state.tasks.map((task) =>
             task.id === id ? { ...task, status } : task
           ),
+        })),
+        updateTaskContent: (id: string, updates: {title?:string; description?:string}) =>
+           set((state) => ({
+            tasks: state.tasks.map((task) => task.id === id ? {...task, ...updates} : task)
         })),
     }),
     { name: "todo-store", skipHydration: true }

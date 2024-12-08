@@ -1,3 +1,4 @@
+"use client";
 import { useTaskStore } from "@/lib/store";
 import React, { useState } from "react";
 
@@ -9,6 +10,19 @@ interface AddTaskModalProps {
 const AddTaskModel = ({ isOpen, onClose }: AddTaskModalProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  const addTask = useTaskStore((state) => state.addTask);
+  if (!isOpen) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim()) return;
+
+    addTask(title, description);
+    setTitle("");
+    setDescription("");
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">

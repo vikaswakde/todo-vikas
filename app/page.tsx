@@ -1,6 +1,9 @@
+"use client";
 import AddTaskModel from "@/components/AddTaskModel";
+import { Task, useTaskStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { Trash2Icon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const week = [
   {
@@ -47,41 +50,22 @@ const week = [
   },
 ];
 
-const todoMap = [
-  {
-    id: 1,
-    status: "DONE",
-    title: "Meet Jack Sparrow",
-    description: "Free him from the prison",
-  },
-  {
-    id: 2,
-    status: "TO_DO",
-    title: "Meet Jack Sparrow",
-    description: "Free him from the prison",
-  },
-  {
-    id: 3,
-    status: "TO_DO",
-    title: "Meet Jack Sparrow",
-    description: "Free him from the prison",
-  },
-  {
-    id: 4,
-    status: "TO_DO",
-    title: "Meet Jack Sparrow",
-    description: "Free him from the prison",
-  },
-  {
-    id: 5,
-    status: "TO_DO",
-    title: "Meet Jack Sparrow",
-    description: "Free him from the prison",
-  },
-];
-
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const tasks = useTaskStore((state) => state.tasks);
+
+  // Global State
+  const updateTask = useTaskStore((state) => state.updateTask);
+  const deleteTask = useTaskStore((state) => state.removeTask);
+
+  const handleTaskStatusChange = (task: Task) => {
+    const newStatus = task.status === "DONE" ? "TODO" : "DONE";
+    updateTask(task.id, newStatus);
+  };
+
+  useEffect(() => {
+    useTaskStore.persist.rehydrate();
+  }, []);
 
   return (
     <main className="min-h-full min-w-full">
@@ -114,29 +98,54 @@ export default function Home() {
             </nav>
           </header>
           {/* todo list section */}
-          <section className="mt-[8.8rem] pt-[2.5rem] w-full px-2">
-            <h2 className="font-bold px-2">Today</h2>
-            <ul className="p-1 pt-2  w-full space-y-4  to-white'">
-              {todoMap.map((item) => (
+          <section className="mt-[8.8rem] pt-[2.5rem] w-full px-2  min-h-[69%] overflow-scroll scrollbar-hide max-w-[24rem] ">
+            <h2 className="font-bold px-2 ">Today</h2>
+            <ul className="p-1 pt-2 flex flex-col  w-full '">
+              {tasks.map((task) => (
                 <li
-                  key={item.id}
-                  className="flex py-2 rounded-2xl px-2 items-start space-x-3 border-white/2 bg-white shadow-sm "
+                  key={task.id}
+                  className="flex py-2 rounded-2xl px-2 items-start space-x-3 border-white/2 bg-white shadow-sm group cursor-pointer my-1 "
                 >
                   <div className="flex py-1">
                     <input
                       type="checkbox"
-                      className="form-checkbox border-black border-2 rounded-full h-5 w-5 cursor-pointer text-black  text-"
-                      aria-label={`Mark ${item.title} as complete`}
+                      checked={task.status === "DONE"}
+                      onChange={() => handleTaskStatusChange(task)}
+                      className="form-checkbox border-black focus:ring-0  rounded-full h-5 w-5 cursor-pointer text-black  transition duration-200"
+                      aria-label={`Mark ${task.title} as complete`}
                     />
                   </div>
-                  <div className="flex flex-col">
-                    <h3 className="font-serif font-extrabold text-lg">
-                      {item.title}
+                  <div className="flex flex-col flex-grow overflow-clip">
+                    <h3
+                      className={cn(
+                        "font-serif font-extrabold text-lg",
+                        task.status === "DONE" &&
+                          "line-through transition duration-200 text-gray-400"
+                      )}
+                    >
+                      {task.title.slice(0, 37) +
+                        (task.title.length > 37 ? "..." : "")}
                     </h3>
-                    <p className="text-sm text-gray-800 font-serif">
-                      {item.description}
-                    </p>
+                    {task.description && (
+                      <p
+                        className={cn(
+                          "text-sm text-gray-800 font-serif",
+                          task.status === "DONE" && "line-through text-gray-400"
+                        )}
+                      >
+                        {task.description?.slice(0, 90) +
+                          (task.description.length > 90 ? "..." : "")}
+                      </p>
+                    )}
                   </div>
+                  <button
+                    onClick={() => deleteTask(task.id)}
+                    className="opacity-0 group-hover:opacity-50 transition-opacity duration-200 p-2 hover:bg-red-100 hover:rounded-2xl hover:border rounded-full "
+                    aria-label="Delete Task"
+                  >
+                    {" "}
+                    <Trash2Icon />
+                  </button>
                 </li>
               ))}
             </ul>

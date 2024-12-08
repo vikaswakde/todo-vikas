@@ -9,6 +9,7 @@ export type Task = {
   title: string;
   description?: string;
   status: Status;
+  date: string;
 };
 
 export type State = {
@@ -17,7 +18,7 @@ export type State = {
 
 export type Actions = {
   // they just produce side effects
-  addTask: (title: string, description?: string) => void;
+  addTask: (title: string, description?: string, date?: Date) => void;
   removeTask: (id: string) => void;
   updateTask: (title: string, status: Status) => void;
   updateTaskContent: (
@@ -30,11 +31,17 @@ export const useTaskStore = create<State & Actions>()(
   persist(
     (set) => ({
       tasks: [],
-      addTask: (title: string, description?: string) =>
+      addTask: (title: string, description?: string, date?: Date) =>
         set((state) => ({
           tasks: [
             ...state.tasks,
-            { id: uuid(), title, description, status: "TODO" },
+            {
+              id: uuid(),
+              title,
+              description,
+              status: "TODO",
+              date: date ? date.toISOString() : new Date().toISOString(),
+            },
           ],
         })),
       removeTask: (id: string) =>

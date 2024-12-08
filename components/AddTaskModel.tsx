@@ -5,9 +5,10 @@ import React, { useState } from "react";
 interface AddTaskModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedDate: Date;
 }
 
-const AddTaskModel = ({ isOpen, onClose }: AddTaskModalProps) => {
+const AddTaskModel = ({ isOpen, onClose, selectedDate }: AddTaskModalProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -18,7 +19,7 @@ const AddTaskModel = ({ isOpen, onClose }: AddTaskModalProps) => {
     e.preventDefault();
     if (!title.trim()) return;
 
-    addTask(title, description);
+    addTask(title, description, selectedDate);
     setTitle("");
     setDescription("");
     onClose();

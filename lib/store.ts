@@ -27,10 +27,59 @@ export type Actions = {
   ) => void;
 };
 
+// Add initial demo data
+const getDemoTasks = (): Task[] => {
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  return [
+    {
+      id: uuid(),
+      title: "👋 Welcome to Onday!",
+      description:
+        "This is a demo task. You can edit or delete it by hovering over the task.",
+      status: "TODO" as Status,
+      date: today.toISOString(),
+    },
+    {
+      id: uuid(),
+      title: "✨ Create your first task",
+      description: "Click the + button at the bottom to add a new task.",
+      status: "TODO" as Status,
+      date: today.toISOString(),
+    },
+    {
+      id: uuid(),
+      title: "📅 Navigate through weeks",
+      description:
+        "Use the arrows beside the calendar to view different weeks.",
+      status: "DONE" as Status,
+      date: today.toISOString(),
+    },
+    {
+      id: uuid(),
+      title: "🎯 Tomorrow's planning",
+      description:
+        "Click on any date in the calendar to add tasks for different days.",
+      status: "TODO" as Status,
+      date: tomorrow.toISOString(),
+    },
+    {
+      id: uuid(),
+      title: "⚡️ Quick access to today",
+      description:
+        "Click the 'Today' button in the top right corner to instantly jump back to today's tasks.",
+      status: "TODO" as Status,
+      date: tomorrow.toISOString(),
+    },
+  ];
+};
+
 export const useTaskStore = create<State & Actions>()(
   persist(
     (set) => ({
-      tasks: [],
+      tasks: getDemoTasks(), // Initialize with demo tasks
       addTask: (title: string, description?: string, date?: Date) =>
         set((state) => ({
           tasks: [
@@ -64,6 +113,19 @@ export const useTaskStore = create<State & Actions>()(
           ),
         })),
     }),
-    { name: "todo-store", skipHydration: true }
+    {
+      name: "todo-store",
+      skipHydration: true,
+      onRehydrateStorage: () => (state) => {
+        if (
+          typeof window !== "undefined" &&
+          !localStorage.getItem("todo-store")
+        ) {
+          if (state && !state.tasks?.length) {
+            state.tasks = getDemoTasks();
+          }
+        }
+      },
+    }
   )
 );

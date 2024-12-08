@@ -6,9 +6,14 @@ import EditTaskModel from "./EditTaskModel";
 import { Task, useTaskStore } from "@/lib/store";
 
 const TaskListSection = ({ selectedDate }: { selectedDate: Date }) => {
+  // Local States
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  
   // Global State
   const tasks = useTaskStore((state) => state.tasks);
   const updateTask = useTaskStore((state) => state.updateTask);
+
+  const deleteTask = useTaskStore((state) => state.removeTask);
   const handleTaskStatusChange = (task: Task) => {
     const newStatus = task.status === "DONE" ? "TODO" : "DONE";
     updateTask(task.id, newStatus);
@@ -32,10 +37,8 @@ const TaskListSection = ({ selectedDate }: { selectedDate: Date }) => {
   };
 
   const { totalTasks, completedTasks } = getTaskStats();
-
   const filteredTasks = getTasksForSelectedDate();
-  const deleteTask = useTaskStore((state) => state.removeTask);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
+
   return (
     <section className="mt-[8.8rem] pt-[2.5rem] w-full px-2  min-h-[69%] overflow-scroll scrollbar-hide max-w-[24rem] ">
       <div className="flex items-start justify-between">
